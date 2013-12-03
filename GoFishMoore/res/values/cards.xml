@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <array name="cardSuits">
+      <item>@drawable/heart</item>
+      <item>@drawable/club</item>
+      <item>@drawable/diamond</item>
+      <item>@drawable/spade</item>  
+    </array>
+    
+    <array name="cardBacks">
+        <item>@drawable/blue_card_back</item>
+        <item>@drawable/red_card_back</item>
+    </array>
+    
+</resources>
