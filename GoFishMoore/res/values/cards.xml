@@ -8,9 +8,22 @@
       <item>@drawable/spade</item>  
     </array>
     
+    <array name="faceCards">
+        <item>@drawable/hearts_king</item>
+        <item>@drawable/hearts_queen</item>
+        <item>@drawable/clubs_king</item>
+        <item>@drawable/clubs_queen</item>
+        <item>@drawable/diamonds_king</item>
+        <item>@drawable/diamonds_queen</item>
+        <item>@drawable/spades_king</item>
+        <item>@drawable/spades_queen</item>
+        <item>@drawable/jack_black</item>
+        <item>@drawable/jack_red</item>
+    </array>
+    
     <array name="cardBacks">
-        <item>@drawable/blue_card_back</item>
-        <item>@drawable/red_card_back</item>
+        <item>@drawable/card_back_blue</item>
+        <item>@drawable/card_back_red</item>
     </array>
     
 </resources>

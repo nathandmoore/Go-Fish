@@ -9,8 +9,9 @@ package com.cse3345.f13.moore;
 
 public final class R {
     public static final class array {
-        public static final int cardBacks=0x7f040001;
+        public static final int cardBacks=0x7f040002;
         public static final int cardSuits=0x7f040000;
+        public static final int faceCards=0x7f040001;
     }
     public static final class attr {
     }
@@ -25,13 +26,23 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int blue_card_back=0x7f020000;
-        public static final int club=0x7f020001;
-        public static final int diamond=0x7f020002;
-        public static final int heart=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int red_card_back=0x7f020005;
-        public static final int spade=0x7f020006;
+        public static final int card_back_blue=0x7f020000;
+        public static final int card_back_red=0x7f020001;
+        public static final int club=0x7f020002;
+        public static final int clubs_king=0x7f020003;
+        public static final int clubs_queen=0x7f020004;
+        public static final int diamond=0x7f020005;
+        public static final int diamonds_king=0x7f020006;
+        public static final int diamonds_queen=0x7f020007;
+        public static final int heart=0x7f020008;
+        public static final int hearts_king=0x7f020009;
+        public static final int hearts_queen=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int jack_black=0x7f02000c;
+        public static final int jack_red=0x7f02000d;
+        public static final int spade=0x7f02000e;
+        public static final int spades_king=0x7f02000f;
+        public static final int spades_queen=0x7f020010;
     }
     public static final class id {
         public static final int action_settings=0x7f090000;
