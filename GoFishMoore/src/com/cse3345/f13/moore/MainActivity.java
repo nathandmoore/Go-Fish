@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -38,34 +39,57 @@ public class MainActivity extends Activity {
         	mFaces[index] = faceCardIDs.getDrawable(index);
         }
         
-        //create deck
+        //create and shuffle deck and have the draw pile be the deck
         Deck deck = new Deck();
+        deck.shuffleDeck();
+        deck.initializeDrawPile();
+        
+        //generate 3 AI controlled hands (5 cards each)
+        
+        //generate 1 player controlled hand (5 cards)
+        
+        //begin the match
+        
+        
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
         
     }
     
     private class Card {
-    	public String value;
+    	
+    	/** Member Variables **/
+    	public String rank;
     	public Drawable suitImg;
     	public int suit;
     	public boolean isFaceCard;
     	public boolean isAce;
     	public Drawable face;
     	
-    	public Card(int insuit, Drawable insuitImg, String invalue, boolean inisFaceCard, boolean inisAce) {
+    	/** Constructor **/
+    	public Card(int insuit, Drawable insuitImg, String inrank, boolean inisFaceCard, boolean inisAce) {
     		
     		suit = insuit;
     		suitImg = insuitImg;
-    		value = invalue;    
+    		rank = inrank;    
     		isFaceCard = inisFaceCard;
     		isAce = inisAce;
     		setFace();
+    		
     	}
     	
+    	/** Methods **/
     	private void setFace() {
     		
     		if (isFaceCard) {
     			
-    			if (value.equals("K")) { //king
+    			if (rank.equals("K")) { //king
     				
     				if (suit == 1) { //hearts
     					
@@ -85,7 +109,7 @@ public class MainActivity extends Activity {
     					
     				}
     				
-    			} else if (value.equals("Q")) { //queen
+    			} else if (rank.equals("Q")) { //queen
     				
     				
     				
@@ -107,7 +131,7 @@ public class MainActivity extends Activity {
     					
     				}
     				
-    			} else if (value.equals("J")) { //jack
+    			} else if (rank.equals("J")) { //jack
     				
     				
     				
@@ -126,28 +150,50 @@ public class MainActivity extends Activity {
     		}
     		
     	}
+    	
     }
     
-    private class Hand {
-    	public ArrayList<Card> cards;
+    private class Player {
     	
-    	public Hand() {
-    		cards = new ArrayList<Card>(5);
+    	/** Member Variables **/
+    	public ArrayList<Card> hand;
+    	public ArrayList<Card> quartets; //sets of 4 matching: just lists what the rank of the card is
+    	
+    	/** Constructor **/
+    	public Player() {
+    		
+    		hand = new ArrayList<Card>(5);
+    		sortHand();
+    		
+    	}
+    	
+    	/** Methods **/
+    	public void sortHand() { //sorts the hand so all like-ranked cards are adjacent
+    		
+    		
+    		
     	}
     	
     }
     
     private class Deck {
-    	public ArrayList<Card> cards;
     	
+    	/** Member Variables **/
+    	public ArrayList<Card> cards;
+    	public ArrayList<Card> drawPile;
+    	
+    	/** Constructor **/
     	public Deck() {
+    		
     		cards = new ArrayList<Card>(52);
     		generateDeck();
+    		
     	}
     	
-    	private void generateDeck() {
+    	/** Methods **/
+    	public void generateDeck() {
     		
-    		String value;
+    		String rank;
     		boolean isFaceCard = true;
     		boolean isAce = false;
     		Drawable face;
@@ -158,42 +204,58 @@ public class MainActivity extends Activity {
     				
     				if (card == 1) {
     					
-    					value = "A";
+    					rank = "A";
     					isAce = true;
     					isFaceCard = false;    							
     					
     				} else if (card == 11) {
     					
-    					value = "J";
+    					rank = "J";
     					
     				} else if (card == 12) {
     					
-    					value = "Q";
+    					rank = "Q";
     					
     				} else if (card == 13) {
     					
-    					value = "K";
+    					rank = "K";
     					
     				} else {
     					
-    					value = String.valueOf(card);
+    					rank = String.valueOf(card);
     					isFaceCard = false;
     					
     				}
     				
-    				Card newCard = new Card(suit+1, mSuits[suit], value, isFaceCard, isAce);
+    				Card newCard = new Card(suit+1, mSuits[suit], rank, isFaceCard, isAce);
     				cards.add(newCard);
     			}
     			
     		}
     	}
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    	
+    	public void shuffleDeck() {
+    		
+    		
+    		
+    	}
+    	
+    	public Card draw() { //pops the next card on the drawPile
+    		
+    		return drawPile.remove(drawPile.size()-1);
+    		
+    	} 
+    	
+    	public void initializeDrawPile() { //creates the draw pile from the deck
+    		
+    		for (int i = 0; i < cards.size(); i++) {
+    			
+    			drawPile.add(cards.get(i));
+    			
+    		}
+    		
+    	}
+    	
     }
     
 }
