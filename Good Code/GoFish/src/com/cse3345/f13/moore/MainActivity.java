@@ -16,13 +16,13 @@ public class MainActivity extends Activity {
 
 	private Drawable[] mSuits;
 	private Drawable[] mFaces;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-    	
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d("NM","Line 25");
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Log.d("NM","Line 25");
         Resources res = getResources();
         
         /** Begin Game Logic */
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
         Log.d("NM","Line 43");
         //create and shuffle deck and have the draw pile be the deck
         Deck deck = new Deck();
-        deck.initializeDrawPile();
+        Log.d("NM","Line 46");
         deck.shuffleDeck();  
         Log.d("NM","Line 48");
         //generate 3 AI controlled hands and 1 player hand (5 cards each)
@@ -53,31 +53,33 @@ public class MainActivity extends Activity {
          * Player[1]-[3] = AI
          */
         Log.d("NM","Line 55");
-        for (int player = 0; player < 5; player++) {
+        for (int p = 0; p < 4; p++) {
+        	Log.d("GenPlayers","Line 57");
+        	Player player = new Player();
+        	players[p] = player;
         	
-        	for (int card = 0; card < 5; card++) 
-        		players[player].hand.add(deck.draw());
-        	
+        	for (int card = 0; card < 5; card++) {
+        		Log.d("GenPlayers","Line 59" + player);
+        		players[p].hand.add(deck.draw());
+        		Log.d("GenPlayers","Line 61");
+        	}
+        	Log.d("GenPlayers","Line 63");
         }
         Log.d("NM","Line 62");
         TextView temp = (TextView) findViewById(R.id.temp);
         temp.setText(players[0].hand.get(0).rank);
         Log.d("NM","Line 65");
         //begin the match
-        
-        
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-        
-    }
-    
-    private class Card {
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+private class Card {
     	
     	/** Member Variables **/
     	public String rank;
@@ -101,7 +103,7 @@ public class MainActivity extends Activity {
     	
     	/** Methods **/
     	private void setFace() {
-    		
+    		Log.d("NM","Line 100");
     		if (isFaceCard) {
     			
     			if (rank.equals("K")) { //king
@@ -193,13 +195,14 @@ public class MainActivity extends Activity {
     	public Deck() {
     		
     		cards = new ArrayList<Card>(52);
+    		drawPile = new ArrayList<Card>(52);
     		generateDeck();
     		
     	}
     	
     	/** Methods **/
     	public void generateDeck() {
-    		
+    		Log.d("NM","Line 198");
     		String rank;
     		boolean isFaceCard = true;
     		boolean isAce = false;
@@ -208,7 +211,7 @@ public class MainActivity extends Activity {
     		for (int suit = 0; suit < mSuits.length; suit++) {    				
     			
     			for (int card = 1; card < 14; card++) {
-    				
+    				Log.d("GenDeck","Line 207");
     				if (card == 1) {
     					
     					rank = "A";
@@ -233,36 +236,29 @@ public class MainActivity extends Activity {
     					isFaceCard = false;
     					
     				}
-    				
+    				Log.d("GenDeck","Line 232");
     				Card newCard = new Card(suit+1, mSuits[suit], rank, isFaceCard, isAce);
     				cards.add(newCard);
+    				Log.d("GenDeck","Line 235");
+    				drawPile.add(newCard);
+    				Log.d("GenDeck","Line 237");
     			}
     			
     		}
     	}
     	
     	public void shuffleDeck() {
-    		
+    		Log.d("NM","Line 242");
     		Collections.shuffle(drawPile);
     		
     	}
     	
     	public Card draw() { //pops the next card on the drawPile
-    		
+    		Log.d("GenPlayers","Line 254");
     		return drawPile.remove(drawPile.size()-1);
-    		
-    	} 
-    	
-    	public void initializeDrawPile() { //creates the draw pile from the deck
-    		
-    		for (int i = 0; i < cards.size(); i++) {
-    			
-    			drawPile.add(cards.get(i));
-    			
-    		}
     		
     	}
     	
     }
-    
+
 }

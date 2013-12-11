@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <array name="cardSuits">
+      <item>@drawable/heart</item>
+      <item>@drawable/club</item>
+      <item>@drawable/diamond</item>
+      <item>@drawable/spade</item>  
+    </array>
+    
+    <array name="faceCards">
+        <item>@drawable/hearts_king</item>
+        <item>@drawable/hearts_queen</item>
+        <item>@drawable/clubs_king</item>
+        <item>@drawable/clubs_queen</item>
+        <item>@drawable/diamonds_king</item>
+        <item>@drawable/diamonds_queen</item>
+        <item>@drawable/spades_king</item>
+        <item>@drawable/spades_queen</item>
+        <item>@drawable/jack_black</item>
+        <item>@drawable/jack_red</item>
+    </array>
+    
+    <array name="cardBacks">
+        <item>@drawable/card_back_blue</item>
+        <item>@drawable/card_back_red</item>
+    </array>
+    
+</resources>
