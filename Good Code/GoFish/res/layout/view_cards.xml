@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/card_border" >
+    android:layout_height="match_parent"
+    android:background="@drawable/card_border"
+    android:padding="5dp"
+    >
     
     <!-- TextView and ImageView for top left corner -->  
     <LinearLayout 
@@ -34,14 +36,44 @@
     </LinearLayout>
     
     <!-- TextView and ImageView for bottom right corner (upside down) -->
+    <LinearLayout 
+        android:id="@+id/bottomCorner"
+        android:layout_gravity="bottom|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="5dp"
+        android:rotation="180"
+        >
+        
+       <TextView 
+            android:id="@+id/rank2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:gravity="center"
+            android:textSize="40sp"
+            /> 
+        <ImageView
+            android:id="@+id/suit2"
+            android:layout_width="30dp"
+            android:layout_height="60dp"
+            android:src="@drawable/spade"
+            android:layout_marginTop="-5dp"
+            /> 
+        
+    </LinearLayout>
     
     <!-- ImageView for rank -->
-    <ImageView 
+    <TextView 
         android:id="@+id/face"
         android:layout_width="200dp"
-        android:layout_height="350dp"
-        android:src="@drawable/spades_king"
+        android:layout_height="210dp"
+        android:text="A"
+        android:textSize="200sp"
         android:layout_gravity="center"
+        android:gravity="center"
         /> 
     
 </FrameLayout>

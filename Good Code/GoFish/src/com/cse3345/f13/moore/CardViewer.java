@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cse3345.f13.moore.MainActivity.Card;
 
@@ -28,18 +30,6 @@ public class CardViewer extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		
-		/** 
-		 *	On something selected or close:	*
-		 	
-		 	mCard = rank of card selected
-		 	
-		 	Intent i = new Intent();
-			i.putExtra(mCard);
-			setResult(Activity.RESULT_OK,i);
-			finish(); //close activity
-		
-		 */
 		
 		Intent i = getIntent();
 		mHand = (ArrayList<Card>) i.getSerializableExtra("Hand");
@@ -93,8 +83,30 @@ public class CardViewer extends ListActivity {
 				cardView = inflater.inflate(R.layout.view_cards, parent, false);
 			}
 			
-			//do work
+			//Set Rank
+			TextView rank = (TextView) findViewById(R.id.rank);
+			TextView rank2 = (TextView) findViewById(R.id.rank2);
+			rank.setText(hand.get(position).rank);
+			rank2.setText(hand.get(position).rank);
 			
+			//Set Suit
+			ImageView suit = (ImageView) findViewById(R.id.suit);
+			ImageView suit2 = (ImageView) findViewById(R.id.suit2);
+			suit.setImageDrawable(hand.get(position).suitImg);
+			suit2.setImageDrawable(hand.get(position).suitImg);
+			
+			//Set face
+			TextView face = (TextView) findViewById(R.id.face);
+			
+			if (hand.get(position).isFaceCard) {
+				
+				face.setBackgroundDrawable(hand.get(position).face);
+				
+			} else {
+				
+				face.setText(hand.get(position).rank);
+				
+			}
 			
 			 return cardView;
 		}
