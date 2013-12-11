@@ -22,53 +22,55 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Log.d("NM","Line 25");
+				Log.d("NM","Line 25");
         Resources res = getResources();
         
         /** Begin Game Logic */
-        Log.d("NM","Line 29");
+        		Log.d("NM","Line 29");
         //get suit drawables
         TypedArray suitsIDs = res.obtainTypedArray(R.array.cardSuits);
         mSuits = new Drawable[suitsIDs.length()];
         for (int index = 0; index < suitsIDs.length(); index++) {
         	mSuits[index] = suitsIDs.getDrawable(index);
         }
-        Log.d("NM","Line 36");
+        		Log.d("NM","Line 36");
         //get face card drawables
         TypedArray faceCardIDs = res.obtainTypedArray(R.array.faceCards);
         mFaces = new Drawable[faceCardIDs.length()];
         for (int index = 0; index < faceCardIDs.length(); index++) {
         	mFaces[index] = faceCardIDs.getDrawable(index);
         }
-        Log.d("NM","Line 43");
+        		Log.d("NM","Line 43");
         //create and shuffle deck and have the draw pile be the deck
         Deck deck = new Deck();
-        Log.d("NM","Line 46");
+        		Log.d("NM","Line 46");
         deck.shuffleDeck();  
-        Log.d("NM","Line 48");
+        		Log.d("NM","Line 48");
+        deck.initializeDrawPile();
+        		Log.d("NM","Line 50");
         //generate 3 AI controlled hands and 1 player hand (5 cards each)
         Player[] players = new Player[4];
         /*
          * Player[0] = human
          * Player[1]-[3] = AI
          */
-        Log.d("NM","Line 55");
+        		Log.d("NM","Line 57");
         for (int p = 0; p < 4; p++) {
-        	Log.d("GenPlayers","Line 57");
+        			Log.d("GenPlayers","Line 59");
         	Player player = new Player();
         	players[p] = player;
         	
         	for (int card = 0; card < 5; card++) {
-        		Log.d("GenPlayers","Line 59" + player);
+        				Log.d("GenPlayers","Line 59" + player);
         		players[p].hand.add(deck.draw());
-        		Log.d("GenPlayers","Line 61");
+        				Log.d("GenPlayers","Line 66");
         	}
-        	Log.d("GenPlayers","Line 63");
+        			Log.d("GenPlayers","Line 68");
         }
-        Log.d("NM","Line 62");
+        		Log.d("NM","Line 70");
         TextView temp = (TextView) findViewById(R.id.temp);
         temp.setText(players[0].hand.get(0).rank);
-        Log.d("NM","Line 65");
+        		Log.d("NM","Line 73");
         //begin the match
 	}
 
@@ -103,7 +105,7 @@ private class Card {
     	
     	/** Methods **/
     	private void setFace() {
-    		Log.d("NM","Line 100");
+    		Log.d("NM","Line 108");
     		if (isFaceCard) {
     			
     			if (rank.equals("K")) { //king
@@ -202,7 +204,7 @@ private class Card {
     	
     	/** Methods **/
     	public void generateDeck() {
-    		Log.d("NM","Line 198");
+    				Log.d("NM","Line 207");
     		String rank;
     		boolean isFaceCard = true;
     		boolean isAce = false;
@@ -236,26 +238,34 @@ private class Card {
     					isFaceCard = false;
     					
     				}
-    				Log.d("GenDeck","Line 232");
+    						Log.d("GenDeck","Line 241");
     				Card newCard = new Card(suit+1, mSuits[suit], rank, isFaceCard, isAce);
     				cards.add(newCard);
-    				Log.d("GenDeck","Line 235");
-    				drawPile.add(newCard);
-    				Log.d("GenDeck","Line 237");
+    						Log.d("GenDeck","Line 244");
     			}
     			
     		}
     	}
     	
     	public void shuffleDeck() {
-    		Log.d("NM","Line 242");
+    				Log.d("NM","Line 251");
     		Collections.shuffle(drawPile);
     		
     	}
     	
     	public Card draw() { //pops the next card on the drawPile
-    		Log.d("GenPlayers","Line 254");
+    				Log.d("GenPlayers","Line 257");
     		return drawPile.remove(drawPile.size()-1);
+    		
+    	}
+    	
+    	public void initializeDrawPile() { //creates the draw pile from the deck
+    		
+    		for (int i = 0; i < cards.size(); i++) {
+    			
+    			drawPile.add(cards.get(i));
+    			
+    		}
     		
     	}
     	
