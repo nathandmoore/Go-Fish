@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,19 +8,205 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
-    android:orientation="vertical" >
+    android:id="@+id/mainGroup"
+    android:background="@drawable/table_border"
+    >
     
-    <TextView
-        android:id="@+id/temp"
+    <!-- Players -->
+    
+    <LinearLayout 
+        android:id="@+id/one"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-    
-    <ImageView 
-        android:id="@+id/temp2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/spade"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        >
+       
+        <TextView
+        android:id="@+id/first_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/you"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:background="@color/playerBack"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
         />
-
-</LinearLayout>
+        
+        <ImageView 
+        android:id="@+id/firsts_cards"
+        android:layout_width="60dp"
+        android:layout_height="85dp"
+        android:src="@drawable/card_back_blue"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <TextView
+        android:id="@+id/firsts_quartets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        />
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/two"        
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        >
+        
+        <TextView
+        android:id="@+id/second_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/two"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:background="@color/playerBack"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <ImageView 
+        android:id="@+id/seconds_cards"
+        android:layout_width="60dp"
+        android:layout_height="85dp"
+        android:src="@drawable/card_back_blue"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <TextView
+        android:id="@+id/seconds_quartets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        />
+       
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/three"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        
+        <TextView
+        android:id="@+id/third_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/three"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:background="@color/playerBack"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <ImageView 
+        android:id="@+id/thirds_cards"
+        android:layout_width="60dp"
+        android:layout_height="85dp"
+        android:src="@drawable/card_back_blue"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <TextView
+        android:id="@+id/thirds_quartets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        />
+       
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/four"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        
+        <TextView
+        android:id="@+id/fourth_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/four"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:background="@color/playerBack"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <ImageView 
+        android:id="@+id/fourths_cards"
+        android:layout_width="60dp"
+        android:layout_height="85dp"
+        android:src="@drawable/card_back_blue"
+        android:layout_marginBottom="5dp"
+        />
+        
+        <TextView
+        android:id="@+id/fourths_quartets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        />
+       
+    </LinearLayout>"
+    
+    <!-- Draw Pile -->
+    
+    <Button
+        android:id="@+id/draw"
+        android:layout_width="90dp"
+        android:layout_height="140dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/card_back_red"
+        /> 
+        
+    <Button
+        android:id="@+id/end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/endBack"
+        android:text="@string/end"
+        android:textColor="@color/black"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:textSize="18sp"
+        /> 
+    
+</RelativeLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_border" >
+    
+    <!-- TextView and ImageView for top left corner -->  
+    <LinearLayout 
+        android:id="@+id/topCorner"
+        android:layout_gravity="top|left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="5dp"
+        >
+        
+       <TextView 
+	        android:id="@+id/rank"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="K"
+	        android:gravity="center"
+	        android:textSize="40sp"
+	        /> 
+        <ImageView
+	        android:id="@+id/suit"
+	        android:layout_width="30dp"
+	        android:layout_height="60dp"
+	        android:src="@drawable/spade"
+	        android:layout_marginTop="-5dp"
+	        /> 
+        
+    </LinearLayout>
+    
+    <!-- TextView and ImageView for bottom right corner (upside down) -->
+    
+    <!-- ImageView for rank -->
+    <ImageView 
+        android:id="@+id/face"
+        android:layout_width="200dp"
+        android:layout_height="350dp"
+        android:src="@drawable/spades_king"
+        android:layout_gravity="center"
+        /> 
+    
+</FrameLayout>

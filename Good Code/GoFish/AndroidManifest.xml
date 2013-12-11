@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="com.cse3345.f13.moore.CardViewer"/>
     </application>
 
 </manifest>

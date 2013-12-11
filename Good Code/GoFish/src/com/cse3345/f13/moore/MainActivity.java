@@ -1,16 +1,20 @@
 package com.cse3345.f13.moore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,69 +22,100 @@ public class MainActivity extends Activity {
 
 	private Drawable[] mSuits;
 	private Drawable[] mFaces;
+	private int mId = 1;
+	private Player[] mPlayers = new Player[4];
+	private Deck mDeck;
+	private String mRankSelected;
+	public static final int PICK_CARD = 101;
+	private boolean gameOn = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_main);
 		
-				Log.d("NM","Line 25");
         Resources res = getResources();
         
         /** Begin Game Logic */
-        		Log.d("NM","Line 29");
+
         //get suit drawables
         TypedArray suitsIDs = res.obtainTypedArray(R.array.cardSuits);
         mSuits = new Drawable[suitsIDs.length()];
-        for (int index = 0; index < suitsIDs.length(); index++) {
+        
+        for (int index = 0; index < suitsIDs.length(); index++){
         	mSuits[index] = suitsIDs.getDrawable(index);
         }
-        		Log.d("NM","Line 36");
+        Log.d("NDM","Line 46");
         //get face card drawables
         TypedArray faceCardIDs = res.obtainTypedArray(R.array.faceCards);
         mFaces = new Drawable[faceCardIDs.length()];
-        for (int index = 0; index < faceCardIDs.length(); index++) {
+        
+        for (int index = 0; index < faceCardIDs.length(); index++){
         	mFaces[index] = faceCardIDs.getDrawable(index);
         }
-        		Log.d("NM","Line 43");
+        Log.d("NDM","Line 54");
         //create and shuffle deck and have the draw pile be the deck
-        Deck deck = new Deck();
-        		Log.d("NM","Line 46");
-        deck.shuffleDeck();  
-        		Log.d("NM","Line 48");
-        deck.initializeDrawPile();
-        		Log.d("NM","Line 50");
+        mDeck = new Deck();
+        mDeck.initializeDrawPile();
+        Log.d("NDM","Line 56");
         //generate 3 AI controlled hands and 1 player hand (5 cards each)
-        Player[] players = new Player[4];
-        /*
-         * Player[0] = human
-         * Player[1]-[3] = AI
-         */
-        		Log.d("NM","Line 57");
-        for (int p = 0; p < 4; p++) {
-        			Log.d("GenPlayers","Line 59");
-        	Player player = new Player();
-        	players[p] = player;
-        	
-        	for (int card = 0; card < 5; card++) {
-        				Log.d("GenPlayers","Line 59" + player);
-        		players[p].hand.add(deck.draw());
-        				Log.d("GenPlayers","Line 66");
-        	}
-        			Log.d("GenPlayers","Line 68");
-        }
         
-        		Log.d("NM","Line 70");
-        TextView temp = (TextView) findViewById(R.id.temp);
-        temp.setText(players[0].hand.get(0).rank);
-        		Log.d("NM","Line 73");
-        		
-        		Log.d("IMG", "Line 76");
-        if (players[0].hand.get(0).isFaceCard) {
-	        ImageView temp2 = (ImageView) findViewById(R.id.temp2);
-	        temp2.setImageDrawable(players[0].hand.get(0).face);
-        }
-        //begin the match
+        initPlayers();       
+        
+        //add click listener to the player's card
+        ImageView playerCards = (ImageView) findViewById(R.id.firsts_cards);
+        playerCards.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// open new activity that shows the player's cards
+				// player will select which card to ask for
+				// the activity will close and return to main
+				pickCard();
+			}
+			
+		});
+        
+        //add click listener to the draw button
+        Button draw = (Button) findViewById(R.id.draw);
+        draw.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// open new activity that shows the player's cards
+				// player will select which card to ask for
+				// the activity will close and return to main
+				drawCard(0);
+			}
+			
+		});
+        
+        //click listener on end match button
+        Button end = (Button) findViewById(R.id.end);
+        end.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				endMatch();
+				
+			}
+			
+		});
+        
+        /* Begin the match */
+        //while (gameOn) {
+        //display user's cards
+        //pickCard();
+        //check other player's cards and give the player any cards or go fish
+        //goFish(0);
+        //simulate the other players (for now, just do this automatically without user interaction)
+        //takeAIsTurns();
+        //let the player start another game
+        //change end game button color til the click it?
+        //}
+        
 	}
 
 	@Override
@@ -90,7 +125,122 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-private class Card {
+	/**
+	 * Initializes 3 AIs and 1 human hands
+	 */
+	public void initPlayers() {
+		
+		/*
+         * Player[0] = human
+         * Player[1]-[3] = AI
+         */
+        for (int p = 0; p < 4; p++) {
+        	
+        	Player player = new Player();
+        	mPlayers[p] = player;
+        	Log.d("NDM","Line 67");
+        	for (int card = 0; card < 5; card++) {
+        		Log.d("NDM","Line 69");
+        		mPlayers[p].hand.add(mDeck.draw());
+        		Log.d("Player: " + p, "Card: " + mPlayers[p].hand.get(card).rank);
+        		
+        	}
+        	
+        	mPlayers[p].checkForQuartet(p);
+        			
+        } 
+		
+	}
+	
+	/** 
+	 * Sends the player to the activity that lets them view their cards and select one
+	 */	
+	public void pickCard() {
+		
+		Intent i = new Intent(this, CardViewer.class);
+		i.putExtra("Hand", mPlayers[0].hand);
+		startActivityForResult(i, PICK_CARD);
+		
+	}
+	
+	/** 
+	 * Gets the card the player picked
+	 */	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == PICK_CARD && resultCode == Activity.RESULT_OK) {
+			
+			mRankSelected = data.getStringExtra(CardViewer.CARD);
+			Log.d("Picked Card","card = " + mRankSelected);
+			goFish(0);
+			
+		}	
+		
+	}
+	
+	/** 
+	 * Searches for the card picked by the player
+	 * if it can't be found then it makes them draw from the pile
+	 */
+	public void goFish(int originator) {
+		
+		boolean noMatch = true;
+		
+		//search other players
+		for (int player = 0; player < mPlayers.length; player++) {
+			
+			if (player != originator) { //skip whoever's turn it is
+				
+				for (int checkAgainst = 0; checkAgainst < mPlayers[player].hand.size(); checkAgainst++) { //check other player's cards
+					
+					if (mRankSelected.equals(mPlayers[player].hand.get(checkAgainst).rank)) { //if match
+						
+						noMatch = false;
+						//remove the card from whosever hand has it and add it to the requester
+						mPlayers[originator].hand.add(mPlayers[player].hand.remove(checkAgainst)); 
+						Log.d("New Card for Player " + originator,"Rank: " + mRankSelected);
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		if (noMatch) //if no match go fish!			
+			drawCard(originator);
+		
+	}
+	
+	/** 
+	 * Draws a card from the pile
+	 */	
+	public void drawCard(int originator) {
+		
+		mPlayers[originator].hand.add(mDeck.draw());
+		Log.d("New Card for Player " + originator,"Rank: " + mPlayers[originator].hand.get(mPlayers[originator].hand.size() - 1).rank);
+		
+	}
+	
+	/**
+	 * Resets the game
+	 */	
+	public void endMatch() {
+		
+		for (int i = 0; i < mPlayers.length; i++) {
+			
+			mPlayers[i].clear();
+			
+		}
+		
+		mDeck.initializeDrawPile();
+		initPlayers();
+		
+	}
+	
+	public class Card implements Serializable {
     	
     	/** Member Variables **/
     	public String rank;
@@ -179,8 +329,9 @@ private class Card {
     		
     	}
     	
-    }
+    } //End Card//
     
+	
     private class Player {
     	
     	/** Member Variables **/
@@ -190,11 +341,82 @@ private class Card {
     	/** Constructor **/
     	public Player() {
     		
-    		hand = new ArrayList<Card>(5);
+    		hand = new ArrayList<Card>(0);
+    		quartets = new ArrayList<Card>(0);
     		
     	}
     	
-    }
+    	public void clear() {
+    		
+    		hand.clear();
+    		quartets.clear();
+    		
+    	}
+    	
+    	
+    	//there cannot be more than 4 of any rank card since there are only 4 suits and one card of each rank per suit
+    	public void checkForQuartet(int originator) {
+    		    		
+    		for (int card = 0; card < hand.size() - 1; card++) { //go through hand
+    			
+    			int[] anyMatches = new int[3]; //store indices of matching cards
+        		int counter = 0; //count number of matches
+        		//reset the abover for each card
+    			
+    			for (int next = card + 1; next < hand.size(); next++) { //check for matches
+    				
+    				if (hand.get(card).rank.equals(hand.get(next).rank)) {
+    					
+    					anyMatches[counter] = next;
+    					counter++;
+    					
+    				}
+    				
+    			}
+    			 
+    			if (counter == 3) { //if 3 matching cards found
+ 					
+ 					for (int i = 0; i < 3; i++) {
+ 						
+ 						quartets.add(hand.remove(anyMatches[i]));
+ 						
+ 					} 					
+
+					quartets.add(hand.remove(card));
+					card--; //because a card was just removed, the size of the hand is 1 less
+					
+					//also need to update the Quartets counter on the main screen					
+					int numQuarts = quartets.size() - 1;
+					
+					if (originator == 0) { //is player
+						
+						TextView quarts = (TextView) findViewById(R.id.firsts_quartets);
+						quarts.setText("Quartets: " + numQuarts);
+						
+					} else if (originator == 1) { //player 2
+						
+						TextView quarts = (TextView) findViewById(R.id.seconds_quartets);
+						quarts.setText("Quartets: " + numQuarts);
+						
+					} else if (originator == 2) { //player 3
+						
+						TextView quarts = (TextView) findViewById(R.id.thirds_quartets);
+						quarts.setText("Quartets: " + numQuarts);
+						
+					} else { //player 4
+						
+						TextView quarts = (TextView) findViewById(R.id.fourths_quartets);
+						quarts.setText("Quartets: " + numQuarts);
+						
+					}
+ 					
+ 				}
+    			 
+    		}
+    		
+    	}
+    	
+    } //End Player//
     
     private class Deck {
     	
@@ -205,8 +427,8 @@ private class Card {
     	/** Constructor **/
     	public Deck() {
     		
-    		cards = new ArrayList<Card>(52);
-    		drawPile = new ArrayList<Card>(52);
+    		cards = new ArrayList<Card>(0);
+    		drawPile = new ArrayList<Card>(0);
     		generateDeck();
     		
     	}
@@ -265,9 +487,9 @@ private class Card {
     	
     	public void shuffleDeck() {
     				Log.d("NM","Line 251");
-    		Random r = new Random( 123487341 );
+    		Random r = new Random( System.currentTimeMillis() );
     		
-    		Collections.shuffle(drawPile,r);
+    		Collections.shuffle(cards,r);
     		
     	}
     	
@@ -279,6 +501,8 @@ private class Card {
     	
     	public void initializeDrawPile() { //creates the draw pile from the deck
     		
+    		shuffleDeck();
+    		
     		for (int i = 0; i < cards.size(); i++) {
     			
     			drawPile.add(cards.get(i));
@@ -287,6 +511,6 @@ private class Card {
     		
     	}
     	
-    }
+    } //End Deck//
 
-}
+} /*/End Code/*/
