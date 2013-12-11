@@ -1,11 +1,11 @@
 package com.cse3345.f13.moore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,12 +41,22 @@ public class MainActivity extends Activity {
         
         //create and shuffle deck and have the draw pile be the deck
         Deck deck = new Deck();
-        deck.shuffleDeck();
         deck.initializeDrawPile();
+        deck.shuffleDeck();  
+               
+        //generate 3 AI controlled hands and 1 player hand (5 cards each)
+        Player[] players = new Player[4];
+        /*
+         * Player[0] = human
+         * Player[1]-[3] = AI
+         */
         
-        //generate 3 AI controlled hands (5 cards each)
-        
-        //generate 1 player controlled hand (5 cards)
+        for (int player = 0; player < 5; player++) {
+        	
+        	for (int card = 0; card < 5; card++) 
+        		players[player].hand.add(deck.draw());
+        	
+        }
         
         //begin the match
         
@@ -163,14 +173,6 @@ public class MainActivity extends Activity {
     	public Player() {
     		
     		hand = new ArrayList<Card>(5);
-    		sortHand();
-    		
-    	}
-    	
-    	/** Methods **/
-    	public void sortHand() { //sorts the hand so all like-ranked cards are adjacent
-    		
-    		
     		
     	}
     	
@@ -236,7 +238,7 @@ public class MainActivity extends Activity {
     	
     	public void shuffleDeck() {
     		
-    		
+    		Collections.shuffle(drawPile);
     		
     	}
     	
