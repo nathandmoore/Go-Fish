@@ -2,6 +2,7 @@ package com.cse3345.f13.moore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -20,7 +22,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.new_main);
 		
 				Log.d("NM","Line 25");
         Resources res = getResources();
@@ -67,10 +69,17 @@ public class MainActivity extends Activity {
         	}
         			Log.d("GenPlayers","Line 68");
         }
+        
         		Log.d("NM","Line 70");
         TextView temp = (TextView) findViewById(R.id.temp);
         temp.setText(players[0].hand.get(0).rank);
         		Log.d("NM","Line 73");
+        		
+        		Log.d("IMG", "Line 76");
+        if (players[0].hand.get(0).isFaceCard) {
+	        ImageView temp2 = (ImageView) findViewById(R.id.temp2);
+	        temp2.setImageDrawable(players[0].hand.get(0).face);
+        }
         //begin the match
 	}
 
@@ -206,8 +215,8 @@ private class Card {
     	public void generateDeck() {
     				Log.d("NM","Line 207");
     		String rank;
-    		boolean isFaceCard = true;
-    		boolean isAce = false;
+    		boolean isFaceCard;
+    		boolean isAce;
     		Drawable face;
     		
     		for (int suit = 0; suit < mSuits.length; suit++) {    				
@@ -223,19 +232,26 @@ private class Card {
     				} else if (card == 11) {
     					
     					rank = "J";
+    					isFaceCard = true;
+    					isAce = false;
     					
     				} else if (card == 12) {
     					
     					rank = "Q";
+    					isFaceCard = true;
+    					isAce = false;
     					
     				} else if (card == 13) {
     					
     					rank = "K";
+    					isFaceCard = true;
+    					isAce = false;
     					
     				} else {
     					
     					rank = String.valueOf(card);
     					isFaceCard = false;
+    					isAce = false;
     					
     				}
     						Log.d("GenDeck","Line 241");
@@ -249,7 +265,9 @@ private class Card {
     	
     	public void shuffleDeck() {
     				Log.d("NM","Line 251");
-    		Collections.shuffle(drawPile);
+    		Random r = new Random( 123487341 );
+    		
+    		Collections.shuffle(drawPile,r);
     		
     	}
     	

@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -59,10 +60,14 @@ public class MainActivity extends Activity {
         		players[player].hand.add(deck.draw());
         	
         }
+        
         Log.d("NM","Line 62");
         TextView temp = (TextView) findViewById(R.id.temp);
         temp.setText(players[0].hand.get(0).rank);
         Log.d("NM","Line 65");
+        
+        Log.d("IMG","Line 68");
+        ImageView temp2 = (ImageView)
         //begin the match
         
         
