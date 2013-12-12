@@ -270,7 +270,7 @@ public class MainActivity extends Activity {
 		// 1. Instantiate an AlertDialog.Builder with its constructor
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		// 2. Chain together various setter methods to set the dialog characteristics
-		builder.setMessage("Your Turn!");
+		builder.setMessage("Your Turn! Click your deck to go!");
 
 		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
