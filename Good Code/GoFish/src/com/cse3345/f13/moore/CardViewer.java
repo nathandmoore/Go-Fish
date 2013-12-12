@@ -67,8 +67,12 @@ public class CardViewer extends ListActivity {
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
 		
+		Log.d("NDM2","HEREERERE " + position);
+		
 		mCard = mCardAdapter.getItem(position).rank;
-			 	
+		
+		Log.d("NDM2","HEREERERE line 74");
+		
 		Intent i = new Intent();
 		i.putExtra(CARD, mCard);
 		setResult(Activity.RESULT_OK,i);
@@ -140,7 +144,16 @@ public class CardViewer extends ListActivity {
 			} else {
 				
 				face.setBackgroundColor(0xFFFFFFFF);
-				face.setText(r);
+				if (r.equals("10")) {
+					
+					face.setText("X");
+					
+				} else {
+					
+					face.setText(r);
+					
+				}
+				
 				
 			}
 			

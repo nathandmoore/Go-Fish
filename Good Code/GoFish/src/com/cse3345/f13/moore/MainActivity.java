@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -30,6 +32,8 @@ public class MainActivity extends Activity {
 	private String mRankSelected;
 	public static final int PICK_CARD = 101;
 	private boolean gameOn = true;
+	private int done = 0;
+	private int repetitive = 0; //tracks if there is a stalemate
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +72,9 @@ public class MainActivity extends Activity {
         
         Log.d("NDM","Line 56");
         //generate 3 AI controlled hands and 1 player hand (5 cards each)
-        
-        initPlayers();       
+        Log.d("NDM","Line at 74");
+        initPlayers();   
+        Log.d("NDM","Line at 76");
         
         //add click listener to the player's card
         ImageView playerCards = (ImageView) findViewById(R.id.firsts_cards);
@@ -84,20 +89,20 @@ public class MainActivity extends Activity {
 			}
 			
 		});
-        
-        //add click listener to the draw button
-        Button draw = (Button) findViewById(R.id.draw);
-        draw.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// open new activity that shows the player's cards
-				// player will select which card to ask for
-				// the activity will close and return to main
-				drawCard(0);
-			}
-			
-		});
+        Log.d("NDM","Line at 91");
+//        //add click listener to the draw button
+//        Button draw = (Button) findViewById(R.id.draw);
+//        draw.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// open new activity that shows the player's cards
+//				// player will select which card to ask for
+//				// the activity will close and return to main
+//				drawCard(0);
+//			}
+//			
+//		});
         
         //click listener on end match button
         Button end = (Button) findViewById(R.id.end);
@@ -115,7 +120,6 @@ public class MainActivity extends Activity {
         /* Begin the match */
         //while (gameOn) {
         //display user's cards
-        pickCard();
         //check other player's cards and give the player any cards or go fish
         //goFish(0);
         //simulate the other players (for now, just do this automatically without user interaction)
@@ -123,6 +127,15 @@ public class MainActivity extends Activity {
         //let the player start another game
         //change end game button color til the click it?
         //}
+        Log.d("NDM","Line at 129");
+        //while (done < 5 && repetitive < 6) {
+        	 Log.d("NDM","Line at 131");
+        	pickCard();
+        	Log.d("NDM","Line at 133");        	
+        	Log.d("NDM","Line at 135");
+        //}
+        
+        
         
 	}
 
@@ -146,9 +159,9 @@ public class MainActivity extends Activity {
         	
         	Player player = new Player();
         	mPlayers[p] = player;
-        	Log.d("NDM","Line 149");
+        	Log.d("NDM","Line at 160");
         	for (int card = 0; card < 5; card++) {
-        		Log.d("NDM","Line 151");
+        		Log.d("NDM","Line at 162");
         		mPlayers[p].hand.add(mDeck.draw());
         		Log.d("Player: " + p, "Card: " + mPlayers[p].hand.get(card).rank);
         		
@@ -157,6 +170,7 @@ public class MainActivity extends Activity {
         	mPlayers[p].checkForQuartet(p);
         	Log.d("NDM","Line 158");		
         } 
+        Log.d("NDM","Line at 170");
 		
 	}
 	
@@ -165,31 +179,109 @@ public class MainActivity extends Activity {
 	 */	
 	public void pickCard() {
 		
-		ArrayList<PlayerCard> playerCards = new ArrayList<PlayerCard>(0);
+		if (mPlayers[0].hand.size() == 0) { //player is out of cards, player is done
+			
+			// 1. Instantiate an AlertDialog.Builder with its constructor
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			// 2. Chain together various setter methods to set the dialog characteristics
+			builder.setMessage("You have no cards");
+
+			builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               // User clicked OK button
+		           }
+		       });
+			// 3. Get the AlertDialog from create()
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			Log.d("NDM","okay");
+			
+		} else {
 		
-		String rank;
-		int suit;
-		int isFace;
-		int isAce;
-		int face;
-		
-		for (int i = 0; i < mPlayers[0].hand.size(); i++) {
+			ArrayList<PlayerCard> playerCards = new ArrayList<PlayerCard>(0);
 			
-			rank = mPlayers[0].hand.get(i).rank;
-			suit = mPlayers[0].hand.get(i).suit;
-			isFace = mPlayers[0].hand.get(i).isFaceCard;
-			isAce = mPlayers[0].hand.get(i).isAce;
-			face = mPlayers[0].hand.get(i).face;
+			String rank;
+			int suit;
+			int isFace;
+			int isAce;
+			int face;
 			
-			PlayerCard pc = new PlayerCard(rank,suit,isFace,isAce,face);
+			for (int i = 0; i < mPlayers[0].hand.size(); i++) {
+				
+				rank = mPlayers[0].hand.get(i).rank;
+				suit = mPlayers[0].hand.get(i).suit;
+				isFace = mPlayers[0].hand.get(i).isFaceCard;
+				isAce = mPlayers[0].hand.get(i).isAce;
+				face = mPlayers[0].hand.get(i).face;
+				
+				PlayerCard pc = new PlayerCard(rank,suit,isFace,isAce,face);
+				
+				playerCards.add(pc);
+				
+			}
 			
-			playerCards.add(pc);
-			
+			Intent i = new Intent(this, CardViewer.class);
+			i.putExtra("Hand", playerCards);
+			startActivityForResult(i, PICK_CARD);
+		}
+	}
+	
+	/**
+	 * Simulates the turn
+	 */
+	public void nextTurn() {
+		Log.d("NDM","Line at 234");
+		for (int i = 0; i < 4; i++) {
+			Log.d("NDM","Line at 236");
+			if (mPlayers[i].hand.size() == 0) {
+				
+				done++;
+				
+			}
+			Log.d("NDM","Line at 242");
 		}
 		
-		Intent i = new Intent(this, CardViewer.class);
-		i.putExtra("Hand", playerCards);
-		startActivityForResult(i, PICK_CARD);
+		if (done == 4) { //game over, everyone is done
+			Log.d("NDM","Line at 246");
+			// 1. Instantiate an AlertDialog.Builder with its constructor
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			// 2. Chain together various setter methods to set the dialog characteristics
+			builder.setMessage("Game's Over! Press the End Match button to start again!");
+
+			builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User clicked OK button
+				}
+			});
+			Log.d("NDM","Line at 257");
+			// 3. Get the AlertDialog from create()
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			Log.d("NDM","okay");
+			done++;
+			
+		} else {
+			Log.d("NDM","Line at 265");
+			simulateAI();
+			Log.d("NDM","Sim AI 267");
+		}
+		
+		Log.d("NDM","Line at 246");
+		// 1. Instantiate an AlertDialog.Builder with its constructor
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		// 2. Chain together various setter methods to set the dialog characteristics
+		builder.setMessage("Your Turn!");
+
+		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User clicked OK button
+			}
+		});
+		Log.d("NDM","Line at 257");
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		Log.d("NDM","okay");
 		
 	}
 	
@@ -200,13 +292,46 @@ public class MainActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == PICK_CARD && resultCode == Activity.RESULT_OK) {
-			
+			Log.d("NDM","HEREERERE line 295");
 			mRankSelected = data.getStringExtra(CardViewer.CARD);
 			Log.d("Picked Card","card = " + mRankSelected);
 			goFish(0);
-			
+			mPlayers[0].checkForQuartet(0);
+			nextTurn();
+			Log.d("NDM","HEREERERE line 301");
 		}	
 		
+	}
+	
+	/**
+	 * Simulates the AIs' turns
+	 */
+	public void simulateAI() {
+		Log.d("NDM","Sim AI 294");
+		//check the AIs for quartets
+		//have the AI select a card to go fishing for
+		for (int a = 1; a < 4; a++) {
+			Log.d("NDM","Sim AI 298");
+			if (mPlayers[a].hand.size() > 0) {
+				Log.d("NDM","Sim AI 300. Here's a: " + a);
+				mPlayers[a].checkForQuartet(a);
+				
+				Random rand = new Random(System.currentTimeMillis());
+			    int end = mPlayers[a].hand.size() - 1;
+			    int select = 0;
+			    Log.d("NDM","Sim AI 306");
+			    select = rand.nextInt(end);
+			    Log.d("NDM","Sim AI 308");
+			    mRankSelected = mPlayers[a].hand.get(select).rank;
+			    Log.d("NDM","Sim AI 310");
+			    goFish(a);
+			    Log.d("NDM","Sim AI 312");
+			    mPlayers[a].checkForQuartet(a);
+			    Log.d("NDM","Sim AI 313");
+			}
+			
+		}
+		Log.d("NDM","Sim AI 317");
 	}
 	
 	/** 
@@ -214,18 +339,18 @@ public class MainActivity extends Activity {
 	 * if it can't be found then it makes them draw from the pile
 	 */
 	public void goFish(int originator) {
-		
+		Log.d("NDM","Go Fish 326");
 		boolean noMatch = true;
 		
 		//search other players
 		for (int player = 0; player < mPlayers.length; player++) {
 			
 			if (player != originator) { //skip whoever's turn it is
-				
+				Log.d("NDM","Go Fish 349");
 				for (int checkAgainst = 0; checkAgainst < mPlayers[player].hand.size(); checkAgainst++) { //check other player's cards
 					
 					if (mRankSelected.equals(mPlayers[player].hand.get(checkAgainst).rank)) { //if match
-						
+						Log.d("NDM","Go Fish 353");
 						noMatch = false;
 						//remove the card from whosever hand has it and add it to the requester
 						mPlayers[originator].hand.add(mPlayers[player].hand.remove(checkAgainst)); 
@@ -239,8 +364,10 @@ public class MainActivity extends Activity {
 			
 		}
 		
-		if (noMatch) //if no match go fish!			
+		if (noMatch && mDeck.drawPile.size() != 0) { //if no match go fish! unless the draw pile is empty			
 			drawCard(originator);
+			repetitive++;
+		}
 		
 	}
 	
@@ -393,55 +520,71 @@ public class MainActivity extends Activity {
     	
     	//there cannot be more than 4 of any rank card since there are only 4 suits and one card of each rank per suit
     	public void checkForQuartet(int originator) {
-    		    		
+    		Log.d("NDM","Check for Quartet line 523");
     		for (int card = 0; card < hand.size() - 1; card++) { //go through hand
     			
     			int[] anyMatches = new int[3]; //store indices of matching cards
         		int counter = 0; //count number of matches
         		//reset the abover for each card
-    			
+        		Log.d("NDM","Check for Quartet line 529");
     			for (int next = card + 1; next < hand.size(); next++) { //check for matches
-    				
+    				Log.d("NDM","Check for Quartet line 531");
     				if (hand.get(card).rank.equals(hand.get(next).rank)) {
-    					
+    					Log.d("NDM","Check for Quartet line 533");
     					anyMatches[counter] = next;
     					counter++;
     					
     				}
-    				
+    				Log.d("NDM","Check for Quartet line 538");
     			}
-    			 
-    			if (counter == 3) { //if 3 matching cards found
- 					
+    			Log.d("NDM","Check for Quartet line 540");
+    			if (counter >= 3) { //if 3 matching cards found
+    				Log.d("NDM","Check for Quartet line 542");
  					for (int i = 0; i < 3; i++) {
- 						
- 						quartets.add(hand.remove(anyMatches[i]));
- 						
+ 						Log.d("NDM","Check for Quartet line 544");
+ 						quartets.add(hand.get(anyMatches[i]));
+ 						Log.d("NDM","Check for Quartet line 546");
  					} 					
+ 					Log.d("NDM","Check for Quartet line 548");
+					quartets.add(hand.get(card));
+					Log.d("NDM","Check for Quartet line 550");
+					
+					int size = hand.size();
+					String rank = hand.get(card).rank;
+					
+					for (int i = 0; i < size; i++) {
 
-					quartets.add(hand.remove(card));
-					card--; //because a card was just removed, the size of the hand is 1 less
+						if (rank.equals(hand.get(i).rank)) {
+							
+							hand.remove(i);
+							size--;
+							i = 0;
+						}
+						
+					}
+					
+					card = 0;//because a card was just removed, the size of the hand is 1 less
 					
 					//also need to update the Quartets counter on the main screen					
-					int numQuarts = quartets.size() - 1;
-					
+					int numQuarts = quartets.size()/4;
+					Log.d("NDM","Check for Quartet line 554");
 					if (originator == 0) { //is player
 						
 						TextView quarts = (TextView) findViewById(R.id.firsts_quartets);
 						quarts.setText("Quartets: " + numQuarts);
-						
+						Log.d("NDM","Check for Quartet LINE 559");
 					} else if (originator == 1) { //player 2
 						
 						TextView quarts = (TextView) findViewById(R.id.seconds_quartets);
 						quarts.setText("Quartets: " + numQuarts);
-						
+						Log.d("NDM","Check for Quartet LINE 564");
 					} else if (originator == 2) { //player 3
 						
 						TextView quarts = (TextView) findViewById(R.id.thirds_quartets);
 						quarts.setText("Quartets: " + numQuarts);
-						
+						Log.d("NDM","Check for Quartet LINE 569");
 					} else { //player 4
-						
+						Log.d("NDM","Check for Quartet LINE 571");
 						TextView quarts = (TextView) findViewById(R.id.fourths_quartets);
 						quarts.setText("Quartets: " + numQuarts);
 						
