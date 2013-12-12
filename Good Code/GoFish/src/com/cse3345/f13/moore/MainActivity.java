@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +22,8 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private Drawable[] mSuits;
-	private Drawable[] mFaces;
+//	private Bitmap[] mSuits;
+//	private Bitmap[] mFaces;
 	private int mId = 1;
 	private Player[] mPlayers = new Player[4];
 	private Deck mDeck;
@@ -40,24 +42,30 @@ public class MainActivity extends Activity {
         /** Begin Game Logic */
 
         //get suit drawables
-        TypedArray suitsIDs = res.obtainTypedArray(R.array.cardSuits);
-        mSuits = new Drawable[suitsIDs.length()];
+//        TypedArray suitsIDs = res.obtainTypedArray(R.array.cardSuits);
+//        mSuits = new Bitmap[suitsIDs.length()];
+//        
+//        for (int index = 0; index < suitsIDs.length(); index++){
+//        	mSuits[index] = ((BitmapDrawable)suitsIDs.getDrawable(index)).getBitmap();
+//        }
+//        
+//        Log.d("NDM","Line 46");
+//        
+//        //get face card drawables
+//        TypedArray faceCardIDs = res.obtainTypedArray(R.array.faceCards);
+//        mFaces = new Bitmap[faceCardIDs.length()];
+//        
+//        for (int index = 0; index < faceCardIDs.length(); index++){
+//        	mFaces[index] = ((BitmapDrawable)faceCardIDs.getDrawable(index)).getBitmap();
+//        }
         
-        for (int index = 0; index < suitsIDs.length(); index++){
-        	mSuits[index] = suitsIDs.getDrawable(index);
-        }
-        Log.d("NDM","Line 46");
-        //get face card drawables
-        TypedArray faceCardIDs = res.obtainTypedArray(R.array.faceCards);
-        mFaces = new Drawable[faceCardIDs.length()];
-        
-        for (int index = 0; index < faceCardIDs.length(); index++){
-        	mFaces[index] = faceCardIDs.getDrawable(index);
-        }
         Log.d("NDM","Line 54");
+        
         //create and shuffle deck and have the draw pile be the deck
         mDeck = new Deck();
+        
         mDeck.initializeDrawPile();
+        
         Log.d("NDM","Line 56");
         //generate 3 AI controlled hands and 1 player hand (5 cards each)
         
@@ -107,7 +115,7 @@ public class MainActivity extends Activity {
         /* Begin the match */
         //while (gameOn) {
         //display user's cards
-        //pickCard();
+        pickCard();
         //check other player's cards and give the player any cards or go fish
         //goFish(0);
         //simulate the other players (for now, just do this automatically without user interaction)
@@ -138,16 +146,16 @@ public class MainActivity extends Activity {
         	
         	Player player = new Player();
         	mPlayers[p] = player;
-        	Log.d("NDM","Line 67");
+        	Log.d("NDM","Line 149");
         	for (int card = 0; card < 5; card++) {
-        		Log.d("NDM","Line 69");
+        		Log.d("NDM","Line 151");
         		mPlayers[p].hand.add(mDeck.draw());
         		Log.d("Player: " + p, "Card: " + mPlayers[p].hand.get(card).rank);
         		
         	}
-        	
+        	Log.d("NDM","Line 156");
         	mPlayers[p].checkForQuartet(p);
-        			
+        	Log.d("NDM","Line 158");		
         } 
 		
 	}
@@ -157,8 +165,30 @@ public class MainActivity extends Activity {
 	 */	
 	public void pickCard() {
 		
+		ArrayList<PlayerCard> playerCards = new ArrayList<PlayerCard>(0);
+		
+		String rank;
+		int suit;
+		int isFace;
+		int isAce;
+		int face;
+		
+		for (int i = 0; i < mPlayers[0].hand.size(); i++) {
+			
+			rank = mPlayers[0].hand.get(i).rank;
+			suit = mPlayers[0].hand.get(i).suit;
+			isFace = mPlayers[0].hand.get(i).isFaceCard;
+			isAce = mPlayers[0].hand.get(i).isAce;
+			face = mPlayers[0].hand.get(i).face;
+			
+			PlayerCard pc = new PlayerCard(rank,suit,isFace,isAce,face);
+			
+			playerCards.add(pc);
+			
+		}
+		
 		Intent i = new Intent(this, CardViewer.class);
-		i.putExtra("Hand", mPlayers[0].hand);
+		i.putExtra("Hand", playerCards);
 		startActivityForResult(i, PICK_CARD);
 		
 	}
@@ -240,21 +270,27 @@ public class MainActivity extends Activity {
 		
 	}
 	
-	public class Card implements Serializable {
+	@SuppressWarnings("serial")
+	private class Card implements Serializable {
     	
-    	/** Member Variables **/
+    	/**
+		 * 
+		 */
+		//private static final long serialVersionUID = 1;
+		/** Member Variables **/
     	public String rank;
-    	public Drawable suitImg;
+    	//public Bitmap suitImg;
     	public int suit;
-    	public boolean isFaceCard;
-    	public boolean isAce;
-    	public Drawable face;
+    	public int isFaceCard;
+    	public int isAce;
+    	//public Bitmap face;
+    	public int face;
     	
     	/** Constructor **/
-    	public Card(int insuit, Drawable insuitImg, String inrank, boolean inisFaceCard, boolean inisAce) {
+    	public Card(int insuit, String inrank, int inisFaceCard, int inisAce) {
     		
     		suit = insuit;
-    		suitImg = insuitImg;
+    		//suitImg = insuitImg;
     		rank = inrank;    
     		isFaceCard = inisFaceCard;
     		isAce = inisAce;
@@ -265,25 +301,25 @@ public class MainActivity extends Activity {
     	/** Methods **/
     	private void setFace() {
     		Log.d("NM","Line 108");
-    		if (isFaceCard) {
+    		if (isFaceCard == 1) {
     			
     			if (rank.equals("K")) { //king
     				
     				if (suit == 1) { //hearts
     					
-    					face = mFaces[0];
+    					face = 0;
     					
     				} else if (suit == 2) { //clubs
     					
-    					face = mFaces[2];
+    					face = 2;
     					
     				} else if (suit == 3) { //diamonds
     					
-    					face = mFaces[4];
+    					face = 4;
     					
     				} else { //spades
     					
-    					face = mFaces[6];
+    					face = 6;
     					
     				}
     				
@@ -293,19 +329,19 @@ public class MainActivity extends Activity {
     				
     				if (suit == 1) { //hearts
     					
-    					face = mFaces[1];
+    					face = 1;
     					
     				} else if (suit == 2) { //clubs
     					
-    					face = mFaces[3];
+    					face = 3;
     					
     				} else if (suit == 3) { //diamonds
     					
-    					face = mFaces[5];
+    					face = 5;
     					
     				} else { //spades
     					
-    					face = mFaces[7];
+    					face = 7;
     					
     				}
     				
@@ -315,11 +351,11 @@ public class MainActivity extends Activity {
     				
     				if (suit == 1 || suit == 3) { //hearts and diamonds: red
     					
-    					face = mFaces[9];
+    					face = 9;
     					
     				} else { //clubs and spades: black
     					
-    					face = mFaces[8];
+    					face = 8;
     					
     				}
     				
@@ -332,7 +368,8 @@ public class MainActivity extends Activity {
     } //End Card//
     
 	
-    private class Player {
+    @SuppressWarnings("serial")
+	private class Player implements Serializable {
     	
     	/** Member Variables **/
     	public ArrayList<Card> hand;
@@ -437,47 +474,46 @@ public class MainActivity extends Activity {
     	public void generateDeck() {
     				Log.d("NM","Line 207");
     		String rank;
-    		boolean isFaceCard;
-    		boolean isAce;
-    		Drawable face;
+    		int isFaceCard;
+    		int isAce;
     		
-    		for (int suit = 0; suit < mSuits.length; suit++) {    				
+    		for (int suit = 0; suit < 4; suit++) {    				
     			
     			for (int card = 1; card < 14; card++) {
     				Log.d("GenDeck","Line 207");
     				if (card == 1) {
     					
     					rank = "A";
-    					isAce = true;
-    					isFaceCard = false;    							
+    					isAce = 1;
+    					isFaceCard = 0;    							
     					
     				} else if (card == 11) {
     					
     					rank = "J";
-    					isFaceCard = true;
-    					isAce = false;
+    					isFaceCard = 1;
+    					isAce = 0;
     					
     				} else if (card == 12) {
     					
     					rank = "Q";
-    					isFaceCard = true;
-    					isAce = false;
+    					isFaceCard = 1;
+    					isAce = 0;
     					
     				} else if (card == 13) {
     					
     					rank = "K";
-    					isFaceCard = true;
-    					isAce = false;
+    					isFaceCard = 1;
+    					isAce = 0;
     					
     				} else {
     					
     					rank = String.valueOf(card);
-    					isFaceCard = false;
-    					isAce = false;
+    					isFaceCard = 0;
+    					isAce = 0;
     					
     				}
     						Log.d("GenDeck","Line 241");
-    				Card newCard = new Card(suit+1, mSuits[suit], rank, isFaceCard, isAce);
+    				Card newCard = new Card(suit+1, rank, isFaceCard, isAce);
     				cards.add(newCard);
     						Log.d("GenDeck","Line 244");
     			}
