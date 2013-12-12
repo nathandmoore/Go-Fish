@@ -395,6 +395,21 @@ public class MainActivity extends Activity {
 		mDeck.initializeDrawPile();
 		initPlayers();
 		
+		// 1. Instantiate an AlertDialog.Builder with its constructor
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		// 2. Chain together various setter methods to set the dialog characteristics
+		builder.setMessage("New Match Ready to Go! Just click on your cards to start!");
+
+		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User clicked OK button
+			}
+		});
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		Log.d("NDM","okay");
+		
 	}
 	
 	@SuppressWarnings("serial")

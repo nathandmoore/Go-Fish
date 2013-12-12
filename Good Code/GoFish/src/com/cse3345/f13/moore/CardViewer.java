@@ -125,6 +125,20 @@ public class CardViewer extends ListActivity {
 			String r = hand.get(position).rank;
 			rank.setText(r);
 			rank2.setText(r);
+			int red = 0xFF872237;
+			int black = 0xFF000000;
+			if (hand.get(position).suit % 2 == 1) {
+				
+				rank.setTextColor(red);
+				rank2.setTextColor(red);
+				
+			} else {
+				
+				rank.setTextColor(black);
+				rank2.setTextColor(black);
+				
+			}
+			
 			Log.d("NDM2","Line 125");
 			//Set Suit
 			ImageView suit = (ImageView) cardView.findViewById(R.id.suit);
@@ -133,29 +147,35 @@ public class CardViewer extends ListActivity {
 			suit2.setImageBitmap(mSuits[hand.get(position).suit - 1]);
 			
 			//Set face
+			ImageView face2 = (ImageView) cardView.findViewById(R.id.face2);
 			TextView face = (TextView) cardView.findViewById(R.id.face);
 			int f = hand.get(position).face;
 			if (hand.get(position).isFaceCard == 1) {
+
+				face.setText("");
 				
-				Drawable x = new BitmapDrawable(mFaces[f]);
-				face.setBackgroundDrawable(x);
-				face.setText(" ");
+				face2.setImageBitmap(mFaces[f]);
 				
-			} else {
-				
-				face.setBackgroundColor(0xFFFFFFFF);
-				if (r.equals("10")) {
+			} else {			
 					
-					face.setText("X");
+				face2.setImageBitmap(null);
+				
+				face.setText(r);
 					
+				if (hand.get(position).suit % 2 == 1) {
+						
+					face.setTextColor(red);
+						
 				} else {
-					
-					face.setText(r);
-					
+						
+					face.setTextColor(black);
+						
 				}
-				
-				
+					
 			}
+				
+				
+			
 			
 			 return cardView;
 		}

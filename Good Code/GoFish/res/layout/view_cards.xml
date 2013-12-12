@@ -69,13 +69,21 @@
     <!-- ImageView for rank -->
     <TextView 
         android:id="@+id/face"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text=""
         android:textSize="200sp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@drawable/jack_black"
         /> 
+        
+    <ImageView 
+        android:id="@+id/face2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/jack_red"
+        />
     
 </FrameLayout>

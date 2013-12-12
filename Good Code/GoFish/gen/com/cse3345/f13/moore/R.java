@@ -19,6 +19,7 @@ public final class R {
         public static final int black=0x7f050004;
         public static final int endBack=0x7f050003;
         public static final int playerBack=0x7f050002;
+        public static final int red=0x7f050005;
         public static final int tableTop=0x7f050000;
         public static final int white=0x7f050001;
     }
@@ -54,12 +55,13 @@ public final class R {
         public static final int table_border=0x7f020012;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a001b;
+        public static final int action_settings=0x7f0a001c;
         public static final int bottomCorner=0x7f0a0017;
         public static final int card=0x7f0a0013;
         public static final int draw=0x7f0a0011;
         public static final int end=0x7f0a0012;
         public static final int face=0x7f0a001a;
+        public static final int face2=0x7f0a001b;
         public static final int first_player=0x7f0a0002;
         public static final int firsts_cards=0x7f0a0003;
         public static final int firsts_quartets=0x7f0a0004;
